@@ -10,7 +10,7 @@ public class SwingTest {
         // Create a new JFrame (main window)
         JFrame frame = new JFrame("Swing Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
+        frame.setSize(700, 500);
 
         // Create a JPanel to hold components
         JPanel panel = new JPanel();

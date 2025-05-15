@@ -24,6 +24,11 @@ public class Pile
 		other.resetPile();
 	}
 	
+	public void addCard(Card c)
+	{
+		cardList.add(c);
+	}
+	
 	public Card drawCard()
 	{
 		return cardList.remove(0);

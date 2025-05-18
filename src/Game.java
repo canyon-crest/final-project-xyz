@@ -14,9 +14,13 @@ public class Game{
 	private Pile centerPile;
 	private Pile burnPile;
 	
+	private ArrayList<Player> playerList;
+	
 	//Constructor
 	public Game() {
 		centerPile = new Pile();
+		burnPile = new Pile();
+		playerList = new ArrayList<Player>();
 	}
 	
 	//Returns whether a slap is valid or not
@@ -55,17 +59,36 @@ public class Game{
 		return false;
 	}
 	
-	//Makes the game end
-	public void endGame() {
+	public void dealCards()
+	{
+		String[] RANKS = {"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"};
+		String[] SUITS ={"spades", "hearts", "diamonds", "clubs"};
+		int[] POINT_VALUES = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 		
+		Deck d = new Deck(RANKS, SUITS, POINT_VALUES);
+		
+		//Deals 52 cards to players. 
+		for(int i = 0; i < 52; i++)
+		{
+			playerList.get(i % playerList.size()).getPile().addCard(d.deal());
+		}
+			
 	}
 	
-	//Starts the game
-	public void startGame() {
-	
-		
+	public void initializeRules(boolean[] rules)
+	{
+		doubles = rules[0];
+		sandwiches = rules[1];
+		marriages = rules[2];
+		divorces = rules[3];
+		gayMarriages = rules[4];
+		sequences = rules[5];
 	}
 	
+	public void addPlayer(Player p)
+	{
+		playerList.add(p);
+	}
 	
 	public Pile getCenterPile()
 	{

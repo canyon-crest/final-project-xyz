@@ -29,11 +29,21 @@ public class Player{
 	
 	
 	public void burn() {
-		myGame.getBurnPile().add(0, myPile.drawCard());
+		myGame.getBurnPile().addCard(myPile.drawCard());
 //		if (myPile.getCardList().size() == 0)
 //		{
 //			myGame.endGame();
 //		}
+	}
+	
+	public String getUsername()
+	{
+		return username;
+	}
+	
+	public Pile getPile()
+	{
+		return myPile;
 	}
 	
 }

@@ -75,7 +75,6 @@ public class Game{
 			
 	}
 	
-<<<<<<< Updated upstream
 	public void initializeRules(boolean[] rules)
 	{
 		doubles = rules[0];
@@ -84,11 +83,10 @@ public class Game{
 		divorces = rules[3];
 		gayMarriages = rules[4];
 		sequences = rules[5];
-=======
+	}
 	//Starts the game
 	public void startGame() {
 		
->>>>>>> Stashed changes
 	}
 	
 	public void addPlayer(Player p)

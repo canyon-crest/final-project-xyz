@@ -16,6 +16,7 @@ public class GameUI extends JFrame {
 
     public GameUI(Game g, String activePlayers) {
     	this.g = g;
+    	this.activePlayers = Integer.parseInt(activePlayers);
         setTitle("Egyptian Hare - Game Screen");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);

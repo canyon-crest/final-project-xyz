@@ -1,4 +1,3 @@
-import Activity11.Card11;
 
 /*** CODE FROME ELEVENS' LAB ***/
 public class Card{

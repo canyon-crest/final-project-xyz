@@ -8,6 +8,7 @@ public class MenuUI extends JFrame {
     private JComboBox<String> numBotsCombo;
     private JComboBox<String>[] botDifficultyCombos = new JComboBox[3];
     private JCheckBox[] ruleCheckboxes = new JCheckBox[6];
+    private String[][] keybinds = {{"1", "2"}, {"Z", "X"}, {"9", "0"}, {"N", "M"}};
 
     public MenuUI() {
         setTitle("Egyptian Hare");
@@ -27,13 +28,20 @@ public class MenuUI extends JFrame {
         }
 
         // HOW TO PLAY PANEL
-        JPanel howToPlayPanel = new JPanel(new GridLayout(6, 1));
+        JPanel howToPlayPanel = new JPanel(new GridLayout(13, 1));
         howToPlayPanel.setBorder(BorderFactory.createTitledBorder("HOW TO PLAY"));
         howToPlayPanel.add(new JLabel("Insert Rules Here:"));
-        for (int i = 0; i < 5; i++) {
-            howToPlayPanel.add(new JLabel("• Rules"));
-        }
-
+        howToPlayPanel.add(new JLabel("• Select game-rules for slaps on the left"));
+        howToPlayPanel.add(new JLabel("• When the game starts, each player places"));
+        howToPlayPanel.add(new JLabel("  a card in clockwise order."));
+        howToPlayPanel.add(new JLabel("• Slapping the pile when one of the patterns"));
+        howToPlayPanel.add(new JLabel("  appears will win you the deck"));
+        howToPlayPanel.add(new JLabel("• Slapping the pile when there is no pattern "));
+        howToPlayPanel.add(new JLabel("  will cause you to lose a card to the pile"));
+        howToPlayPanel.add(new JLabel("• The game ends when the users click the "));
+        howToPlayPanel.add(new JLabel("  \"End Game\" button, or if one player has"));
+        howToPlayPanel.add(new JLabel("  all the cards and no other players have an"));
+        howToPlayPanel.add(new JLabel("  opportunity to win"));
         // CENTER PANEL (Players, Keybinds, etc.)
         JPanel centerPanel = new JPanel(new GridBagLayout());
         GridBagConstraints cpc = new GridBagConstraints();
@@ -55,14 +63,13 @@ public class MenuUI extends JFrame {
         centerPanel.add(numPlayersCombo, cpc);
 
         // Keybind + Player Fields
-        String[][] keybinds = {{"1", "2"}, {"Z", "X"}, {"9", "0"}, {"N", "M"}};
         for (int i = 0; i < 4; i++) {
             cpc.gridx = 0;
             cpc.gridy++;
             centerPanel.add(new JLabel("Place: " + keybinds[i][0] + "  Slap: " + keybinds[i][1]), cpc);
 
             cpc.gridx = 1;
-            playerNameFields[i] = new JTextField("Name" + (i + 1), 10);
+            playerNameFields[i] = new JTextField("Player" + (i + 1), 10);
             centerPanel.add(playerNameFields[i], cpc);
         }
 
@@ -131,7 +138,9 @@ public class MenuUI extends JFrame {
         	
         	//add players given menu selections
         	for(int i = 0; i < playerCount; i++)
-        		g.addPlayer(new Player(playerNameFields[i].getText(), new Pile(), g));
+        	{
+        		g.addPlayer(new Player(playerNameFields[i].getText(), new Pile(), g, keybinds[i][0], keybinds[i][1]));
+        	}
         	
         	//deal cards out
         	g.dealCards();
@@ -145,7 +154,7 @@ public class MenuUI extends JFrame {
         	g.initializeRules(a);
         	
         	//transition the display to the game screen
-        	
+        	GameUI i = new GameUI(g, (String) numPlayersCombo.getSelectedItem());
         }
     }
 

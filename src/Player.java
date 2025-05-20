@@ -2,12 +2,16 @@ public class Player{
 	private String username;
 	private Pile myPile;
 	private Game myGame;
+	private String sKey;
+	private String pKey;
 	
-	public Player(String username, Pile myPile, Game myGame)
+	public Player(String username, Pile myPile, Game myGame, String sKey, String pKey)
 	{
 		this.username = username;
 		this.myPile = myPile;
 		this.myGame = myGame;
+		this.sKey = sKey;
+		this.pKey = pKey;
 	}
 	
 	public void placeCard(Pile otherPile) {
@@ -30,10 +34,6 @@ public class Player{
 	
 	public void burn() {
 		myGame.getBurnPile().addCard(myPile.drawCard());
-//		if (myPile.getCardList().size() == 0)
-//		{
-//			myGame.endGame();
-//		}
 	}
 	
 	public String getUsername()

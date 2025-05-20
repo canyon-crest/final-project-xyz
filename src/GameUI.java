@@ -9,11 +9,13 @@ public class GameUI extends JFrame {
     private JLabel[] keybindLabels = new JLabel[4];
     private JLabel[] cardBackImages = new JLabel[4];
     private JLabel[] playerIcons = new JLabel[4];
+    private Game g;
 
     // For example, 2 human players and 2 bots.
-    private int activePlayers = 4;
+    private int activePlayers;
 
-    public GameUI() {
+    public GameUI(Game g, String activePlayers) {
+    	this.g = g;
         setTitle("Egyptian Hare - Game Screen");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);

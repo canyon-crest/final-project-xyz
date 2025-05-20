@@ -18,6 +18,15 @@ public class Player{
 		otherPile.addCard(myPile.drawCard());
 	}
 	
+	public String getSKey()
+	{
+		return sKey;
+	}
+	
+	public String getPKey()
+	{
+		return pKey;
+	}
 	
 	public void slap() {
 		if (myGame.isASlap())

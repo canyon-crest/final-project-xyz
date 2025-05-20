@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.awt.event.*;
 
 public class GameUI extends JFrame {
 
@@ -33,7 +34,7 @@ public class GameUI extends JFrame {
         JPanel bottomPanel = new JPanel(new GridLayout(1, 4, 10, 10));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < this.activePlayers; i++) {
             playerPanels[i] = createPlayerSlot(i);
             bottomPanel.add(playerPanels[i]);
         }
@@ -78,7 +79,7 @@ public class GameUI extends JFrame {
 
     private void updateActivePlayers() {
         // Show only active player slots, hide others
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < activePlayers; i++) {
             playerPanels[i].setVisible(i < activePlayers);
         }
 
@@ -93,9 +94,37 @@ public class GameUI extends JFrame {
         for (int i = 0; i < activePlayers; i++) {
             keybindLabels[i].setText("Slap: " + keybinds[i][1] + "  Deal: " + keybinds[i][0]);
         }
+        
     }
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(GameUI::new);
     }
+}
+
+class SlapOrPlace extends JFrame implements KeyListener
+{
+	private Player myPlayer;
+	public SlapOrPlace(JPanel myPanel, Player myPlayer)
+	{
+		this.myPlayer = myPlayer;
+		myPanel.addKeyListener(this);
+		myPanel.setFocusable(true);
+	}
+	
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
+            myPlayer.slap();
+        }
+//        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0)) {
+//        	myPlayer.placeCard(.getCenterPile());
+//        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
 }

@@ -118,11 +118,14 @@ class SlapOrPlace extends JFrame implements KeyListener
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
+        	//Slapping a card
             myPlayer.slap();
             System.out.println(myPlayer.getUsername() + " - slapped");
         }
 //        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0)) {
+//          //Placing a card   
 //        	myPlayer.placeCard(.getCenterPile());
+//          System.out.println(myPlayer.getUsername() + " - placed a card");
 //        }
     }
 

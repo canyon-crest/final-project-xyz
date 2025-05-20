@@ -5,6 +5,7 @@ public class Card{
 	private String suit;
 	private String rank;
 	private int pointValue;
+	private String cardFileName;
 
 
    /**
@@ -22,8 +23,16 @@ public class Card{
 		rank = cardRank;
 		suit = cardSuit;
 		pointValue = cardPointValue;
+		
+		String str = "cards/";
+		str += cardRank + cardSuit;
+		str += ".GIF";
+		cardFileName = str;
 	}
 
+	public String getCardFileName() {
+		return cardFileName;
+	}
 
 	/**
 	 * Accesses this <code>Card's</code> suit.

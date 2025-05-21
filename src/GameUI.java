@@ -79,8 +79,9 @@ public class GameUI extends JFrame {
 
     private void updateActivePlayers() {
         // Show only active player slots, hide others
+    	
         for (int i = 0; i < activePlayers; i++) {
-            playerPanels[i].setVisible(i < activePlayers);
+            playerPanels[i].setVisible(true);
         }
 
         // Example keybinds
@@ -93,6 +94,13 @@ public class GameUI extends JFrame {
 
         for (int i = 0; i < activePlayers; i++) {
             keybindLabels[i].setText("Slap: " + keybinds[i][1] + "  Deal: " + keybinds[i][0]);
+        }
+        
+        // Make keybinds functional
+        ArrayList<Player> playerList = g.getPlayerList();
+        for (int i = 0; i<activePlayers; i++)
+        {
+        	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i)));
         }
         
     }
@@ -108,7 +116,6 @@ class SlapOrPlace extends JFrame implements KeyListener
 	public SlapOrPlace(JPanel myPanel, Player myPlayer)
 	{
 		this.myPlayer = myPlayer;
-		myPanel.addKeyListener(this);
 		myPanel.setFocusable(true);
 	}
 	
@@ -121,12 +128,14 @@ class SlapOrPlace extends JFrame implements KeyListener
         	//Slapping a card
             myPlayer.slap();
             System.out.println(myPlayer.getUsername() + " - slapped");
+            System.out.println(myPlayer.getPile().getSize());
         }
-//        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0)) {
-//          //Placing a card   
-//        	myPlayer.placeCard(.getCenterPile());
-//          System.out.println(myPlayer.getUsername() + " - placed a card");
-//        }
+        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0)) {
+          //Placing a card   
+        	myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	System.out.println(myPlayer.getUsername() + " - placed a card");
+        	System.out.println(myPlayer.getPile().getSize());
+        }
     }
 
     @Override

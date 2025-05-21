@@ -54,5 +54,9 @@ public class Player{
 	{
 		return myPile;
 	}
+	public Game getGame()
+	{
+		return myGame;
+	}
 	
 }

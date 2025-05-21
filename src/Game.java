@@ -103,4 +103,8 @@ public class Game{
 	{
 		return burnPile;
 	}
+	public ArrayList<Player> getPlayerList()
+	{
+		return playerList;
+	}
 }

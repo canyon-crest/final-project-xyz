@@ -31,8 +31,8 @@ public class Player{
 	public void slap() {
 		if (myGame.isASlap())
 		{
-			myPile.addPile(myGame.getBurnPile());
-			myPile.addPile(myGame.getCenterPile());
+			addPile(myGame.getBurnPile());
+			addPile(myGame.getCenterPile());
 		}
 		else
 		{
@@ -40,6 +40,10 @@ public class Player{
 		}
 	}
 	
+	public void addPile(Pile other)
+	{
+		myPile.addPile(other);
+	}
 	
 	public void burn() {
 		myGame.getBurnPile().addCard(myPile.drawCard());

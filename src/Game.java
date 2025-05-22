@@ -89,6 +89,12 @@ public class Game{
 		
 	}
 	
+	public void endRound(Player winner)
+	{
+		winner.addPile(centerPile);
+		winner.addPile(burnPile);
+	}
+	
 	public void addPlayer(Player p)
 	{
 		playerList.add(p);

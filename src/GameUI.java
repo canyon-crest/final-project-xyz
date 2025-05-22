@@ -93,30 +93,36 @@ public class GameUI extends JFrame {
         };
 
         for (int i = 0; i < activePlayers; i++) {
-            keybindLabels[i].setText("Slap: " + keybinds[i][1] + "  Deal: " + keybinds[i][0]);
+            keybindLabels[i].setText("Deal: " + keybinds[i][0] + "  Slap: " + keybinds[i][1]);
         }
         
         // Make keybinds functional
         ArrayList<Player> playerList = g.getPlayerList();
         for (int i = 0; i<activePlayers; i++)
         {
-        	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i)));
+        	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i), i));
         }
-        
+        SlapOrPlace.setActivePlayers(activePlayers);
     }
     
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(GameUI::new);
+        //SwingUtilities.invokeLater(GameUI::new);
     }
 }
 
 class SlapOrPlace extends JFrame implements KeyListener
 {
 	private Player myPlayer;
-	public SlapOrPlace(JPanel myPanel, Player myPlayer)
+	private int playerIdx;
+	private static int currentPlayerIdx = 0;
+	private static int activePlayers;
+	
+	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx)
 	{
 		this.myPlayer = myPlayer;
 		myPanel.setFocusable(true);
+		this.playerIdx = playerIdx;
 	}
 	
     @Override
@@ -128,16 +134,26 @@ class SlapOrPlace extends JFrame implements KeyListener
         	//Slapping a card
             myPlayer.slap();
             System.out.println(myPlayer.getUsername() + " - slapped");
-            System.out.println(myPlayer.getPile().getSize());
+            System.out.println(myPlayer.getPile().getSize() + " cards left");
         }
-        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0)) {
+        else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	myPlayer.placeCard(myPlayer.getGame().getCenterPile());
         	System.out.println(myPlayer.getUsername() + " - placed a card");
-        	System.out.println(myPlayer.getPile().getSize());
+        	System.out.println(myPlayer.getPile().getSize() + " cards left");
+        	
+        	currentPlayerIdx++;
+        	currentPlayerIdx %= activePlayers;
+        	
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {}
+    
+    public static void setActivePlayers(int activePlayersInput)
+    {
+    	activePlayers = activePlayersInput;
+    }
+    
 }

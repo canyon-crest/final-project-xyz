@@ -117,6 +117,8 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private int playerIdx;
 	private static int currentPlayerIdx = 0;
 	private static int activePlayers;
+	private static int currentPlayerPlay = 1;
+	private static boolean faceCardPlaced = false;
 	
 	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx)
 	{
@@ -138,12 +140,32 @@ class SlapOrPlace extends JFrame implements KeyListener
         }
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
-        	myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	//if (c.isFaceCard())
+//        	{
+//            	faceCardPlaced = true;
+//            	currentPlayerPlay = c.mandatoryPlace();
+//        	}
+//        	else
+//        	{
+//        		currentPlayerPlay--;
+//        	}
         	System.out.println(myPlayer.getUsername() + " - placed a card");
         	System.out.println(myPlayer.getPile().getSize() + " cards left");
+        	currentPlayerPlay--;
         	
-        	currentPlayerIdx++;
-        	currentPlayerIdx %= activePlayers;
+        	//check if its over
+        	if(myPlayer.getGame().roundOver())
+        	{
+        		myPlayer.getGame().endRound(myPlayer);
+        		previousPlayer();
+        		currentPlayerPlay = 1;
+        	}
+        	if(currentPlayerPlay == 0)
+        	{
+	        	nextPlayer();
+	        	currentPlayerPlay = c.mandatoryPlace();
+        	}
         	
         }
     }
@@ -154,6 +176,16 @@ class SlapOrPlace extends JFrame implements KeyListener
     public static void setActivePlayers(int activePlayersInput)
     {
     	activePlayers = activePlayersInput;
+    }
+    
+    private static void previousPlayer()
+    {
+    	currentPlayerIdx = (currentPlayerIdx - 1 + activePlayers) % activePlayers;
+    }
+    
+    private static void nextPlayer()
+    {
+    	currentPlayerIdx = (currentPlayerIdx + 1) % activePlayers;
     }
     
 }

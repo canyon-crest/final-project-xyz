@@ -15,11 +15,14 @@ public class Player{
 
 	}
 	
-	public void placeCard(Pile otherPile) {
+	public Card placeCard(Pile otherPile) {
 		if(myPile.getSize() == 0) 
-			return;
-		otherPile.addCard(myPile.drawCard());
+			return null;
+		Card c = myPile.drawCard();
+		otherPile.addCard(c);
+		return c;
 	}
+	
 	
 	
 	
@@ -29,12 +32,7 @@ public class Player{
 		
 		if (myGame.isASlap())
 		{
-<<<<<<< HEAD
-			addPile(myGame.getBurnPile());
-			addPile(myGame.getCenterPile());
-=======
 			takeCenterPile();
->>>>>>> ec2ea987b141ffeaf7da4eb17802789336a0cce2
 		}
 		else
 		{

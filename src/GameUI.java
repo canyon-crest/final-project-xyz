@@ -10,6 +10,7 @@ public class GameUI extends JFrame {
     private JLabel[] keybindLabels = new JLabel[4];
     private JLabel[] cardBackImages = new JLabel[4];
     private JLabel[] playerIcons = new JLabel[4];
+    private JLabel centerPile;
     private Game g;
 
     // For example, 2 human players and 2 bots.
@@ -24,7 +25,7 @@ public class GameUI extends JFrame {
         setLayout(new BorderLayout());
 
         // Center pile display (placeholder)
-        JLabel centerPile = new JLabel("CENTER PILE");
+        centerPile = new JLabel("CENTER PILE");
         centerPile.setHorizontalAlignment(SwingConstants.CENTER);
         centerPile.setFont(new Font("SansSerif", Font.BOLD, 20));
         centerPile.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -118,7 +119,6 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private static int currentPlayerIdx = 0;
 	private static int activePlayers;
 	private static int currentPlayerPlay = 1;
-	private static boolean faceCardPlaced = false;
 	
 	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx)
 	{
@@ -146,7 +146,7 @@ class SlapOrPlace extends JFrame implements KeyListener
         	currentPlayerPlay--;
         	
         	//check if its over
-        	if(myPlayer.getGame().roundOver())
+        	if(myPlayer.getGame().isRoundOver())
         	{
         		myPlayer.getGame().endRound(myPlayer);
         		previousPlayer();

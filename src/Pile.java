@@ -44,6 +44,13 @@ public class Pile
 		return cardList;
 	}
 	
+	public Card get(int i)
+	{
+		if(i >= 0 && i < getSize())
+			return cardList.get(i);
+		return null;
+	}
+	
 	
 	
 }

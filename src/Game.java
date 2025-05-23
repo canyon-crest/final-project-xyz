@@ -61,7 +61,19 @@ public class Game{
 	
 	public boolean isRoundOver()
 	{
-		
+		int cardsAfterFace = 0;
+		int cardsNeededAfterFace = 0;
+		for(int i = centerPile.getSize() - 1; i >= 0; i--)
+		{
+			if(!centerPile.get(i).isFaceCard())
+				cardsAfterFace++;
+			else 
+			{
+				cardsNeededAfterFace = centerPile.get(i).mandatoryPlace();
+				break;
+			}
+		}
+		return cardsAfterFace == cardsNeededAfterFace;
 	}
 	
 	public void dealCards()

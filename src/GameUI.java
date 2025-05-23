@@ -146,16 +146,24 @@ class SlapOrPlace extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
         	//Slapping a card
-            myPlayer.slap();
-            System.out.println(myPlayer.getUsername() + " - slapped");
-            System.out.println(myPlayer.getPile().getSize() + " cards left");
+            boolean slapped = myPlayer.slap();
+            if(slapped)
+            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - slapped");
+            else
+            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - burned");
+            
+            if(slapped)
+            	currentPlayerPlay = 1;
+            else if(myPlayer.getPile().getSize() == 0)
+            	System.out.println("GAME OVER");
         }
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	if(c == null)
+        		System.out.println("GAME OVER");
         	myGameUI.changeCenterCardImg(c);
-        	System.out.println(myPlayer.getUsername() + " - placed a " + c.getCardFileName());
-        	System.out.println(myPlayer.getPile().getSize() + " cards left");
+        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
         	currentPlayerPlay--;
         	
         	//check if its over

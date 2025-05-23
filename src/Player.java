@@ -26,17 +26,19 @@ public class Player{
 	
 	
 	
-	public void slap() {
+	public boolean slap() {
 		if(myPile.getSize() == 0) 
-			return;
+			return false;
 		
 		if (myGame.isASlap())
 		{
 			takeCenterPile();
+			return true;
 		}
 		else
 		{
 			burn();
+			return false;
 		}
 	}
 	

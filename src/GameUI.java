@@ -102,7 +102,7 @@ public class GameUI extends JFrame {
         ArrayList<Player> playerList = g.getPlayerList();
         for (int i = 0; i<activePlayers; i++)
         {
-        	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i), i));
+        	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i), i, this));
         }
         SlapOrPlace.setActivePlayers(activePlayers);
     }
@@ -112,9 +112,9 @@ public class GameUI extends JFrame {
         //SwingUtilities.invokeLater(GameUI::new);
     }
     
-    public void centerCardImg(Card c)
+    public void changeCenterCardImg(Card c)
     {
-    	String cardImageFileName = c.getCardFileName()
+    	String cardImageFileName = c.getCardFileName();
 		URL imageURL = getClass().getResource(cardImageFileName);
     	ImageIcon icon = new ImageIcon(imageURL);
 		centerPile.setIcon(icon);
@@ -129,12 +129,14 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private static int currentPlayerIdx = 0;
 	private static int activePlayers;
 	private static int currentPlayerPlay = 1;
+	private GameUI myGameUI;
 	
-	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx)
+	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx, GameUI myGameUI)
 	{
 		this.myPlayer = myPlayer;
 		myPanel.setFocusable(true);
 		this.playerIdx = playerIdx;
+		this.myGameUI = myGameUI;
 	}
 	
     @Override
@@ -151,6 +153,7 @@ class SlapOrPlace extends JFrame implements KeyListener
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	myGameUI.changeCenterCardImg(c);
         	System.out.println(myPlayer.getUsername() + " - placed a " + c.getCardFileName());
         	System.out.println(myPlayer.getPile().getSize() + " cards left");
         	currentPlayerPlay--;

@@ -1,4 +1,7 @@
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 public class Game{
 	private boolean doubles;
@@ -111,6 +114,9 @@ public class Game{
 		winner.addPile(centerPile);
 		winner.addPile(burnPile);
 	}
+	
+	
+	
 	
 	public void addPlayer(Player p)
 	{

@@ -54,6 +54,14 @@ public class Card{
 		return (pointValue > 10 || pointValue == 1);
 	}
 	
+	public int mandatoryPlace()
+	{
+		if(pointValue == 1) return 4;
+		if(pointValue == 13) return 3;
+		if(pointValue == 12) return 2;
+		return 1;
+	}
+	
 	/** Compare this card with the argument.
 	 * @param otherCard the other card to compare to this
 	 * @return true if the rank, suit, and point value of this card

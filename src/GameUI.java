@@ -141,15 +141,6 @@ class SlapOrPlace extends JFrame implements KeyListener
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
-        	//if (c.isFaceCard())
-//        	{
-//            	faceCardPlaced = true;
-//            	currentPlayerPlay = c.mandatoryPlace();
-//        	}
-//        	else
-//        	{
-//        		currentPlayerPlay--;
-//        	}
         	System.out.println(myPlayer.getUsername() + " - placed a card");
         	System.out.println(myPlayer.getPile().getSize() + " cards left");
         	currentPlayerPlay--;

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
+import java.net.URL;
 
 public class GameUI extends JFrame {
 
@@ -10,7 +11,7 @@ public class GameUI extends JFrame {
     private JLabel[] keybindLabels = new JLabel[4];
     private JLabel[] cardBackImages = new JLabel[4];
     private JLabel[] playerIcons = new JLabel[4];
-    private static JLabel centerPile;
+    private JLabel centerPile;
     private Game g;
 
     // For example, 2 human players and 2 bots.
@@ -111,9 +112,13 @@ public class GameUI extends JFrame {
         //SwingUtilities.invokeLater(GameUI::new);
     }
     
-    public static void centerCardImg(Card c)
+    public void centerCardImg(Card c)
     {
-    	
+    	String cardImageFileName = c.getCardFileName()
+		URL imageURL = getClass().getResource(cardImageFileName);
+    	ImageIcon icon = new ImageIcon(imageURL);
+		centerPile.setIcon(icon);
+		centerPile.setVisible(true);
     }
 }
 

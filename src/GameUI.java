@@ -10,7 +10,7 @@ public class GameUI extends JFrame {
     private JLabel[] keybindLabels = new JLabel[4];
     private JLabel[] cardBackImages = new JLabel[4];
     private JLabel[] playerIcons = new JLabel[4];
-    private JLabel centerPile;
+    private static JLabel centerPile;
     private Game g;
 
     // For example, 2 human players and 2 bots.
@@ -109,6 +109,11 @@ public class GameUI extends JFrame {
     
     public static void main(String[] args) {
         //SwingUtilities.invokeLater(GameUI::new);
+    }
+    
+    public static void centerCardImg(Card c)
+    {
+    	
     }
 }
 

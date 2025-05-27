@@ -17,9 +17,9 @@ public class GameUI extends JFrame {
     // For example, 2 human players and 2 bots.
     private int activePlayers;
 
-    public GameUI(Game g, String activePlayers) {
+    public GameUI(Game g, int activePlayers) {
     	this.g = g;
-    	this.activePlayers = Integer.parseInt(activePlayers);
+    	this.activePlayers = activePlayers;
         setTitle("Egyptian Hare - Game Screen");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);

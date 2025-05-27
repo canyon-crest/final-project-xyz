@@ -154,7 +154,7 @@ public class MenuUI extends JFrame {
         	g.initializeRules(a);
         	
         	//transition the display to the game screen
-        	GameUI i = new GameUI(g, (String) numPlayersCombo.getSelectedItem());
+        	GameUI i = new GameUI(g, Integer.parseInt((String)numPlayersCombo.getSelectedItem()));
         }
     }
 

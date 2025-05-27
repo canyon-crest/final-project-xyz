@@ -118,6 +118,7 @@ public class GameUI extends JFrame {
 		URL imageURL = getClass().getResource(cardImageFileName);
     	ImageIcon icon = new ImageIcon(imageURL);
 		centerPile.setIcon(icon);
+		centerPile.setText("");
 		centerPile.setVisible(true);
     }
 }

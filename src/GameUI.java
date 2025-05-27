@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 import java.net.URL;
+import java.util.concurrent.*;
 
 public class GameUI extends JFrame {
 
@@ -43,6 +44,7 @@ public class GameUI extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
         updateActivePlayers();
+        updatePlayerCardCounts();
 
         setVisible(true);
     }
@@ -121,6 +123,19 @@ public class GameUI extends JFrame {
 		centerPile.setText("");
 		centerPile.setVisible(true);
     }
+    
+    public void clearCenterCardImg()
+    {
+    	centerPile.setVisible(false);
+    }
+    
+    public void updatePlayerCardCounts()
+    {
+    	for(int i = 0; i < activePlayers; i++)
+    	{
+    		cardCountLabels[i].setText("" + g.getPlayerList().get(i).getPile().getSize());
+    	}
+    }
 }
 
 class SlapOrPlace extends JFrame implements KeyListener
@@ -129,6 +144,7 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private int playerIdx;
 	private static int currentPlayerIdx = 0;
 	private static int activePlayers;
+	private static ArrayList<Integer> activePlayersIdx = new ArrayList<Integer>();
 	private static int currentPlayerPlay = 1;
 	private GameUI myGameUI;
 	
@@ -138,6 +154,8 @@ class SlapOrPlace extends JFrame implements KeyListener
 		myPanel.setFocusable(true);
 		this.playerIdx = playerIdx;
 		this.myGameUI = myGameUI;
+		
+		activePlayersIdx.add(playerIdx);
 	}
 	
     @Override
@@ -154,12 +172,15 @@ class SlapOrPlace extends JFrame implements KeyListener
             	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - burned");
             
             if(slapped)
-            	currentPlayerPlay = 1;
-            else if(myPlayer.getPile().getSize() == 0)
             {
-        		System.out.println("GAME OVER");
-        		return;
-    		}
+            	currentPlayerPlay = 1;
+            	currentPlayerIdx = playerIdx;
+            	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        		scheduler.schedule(() -> {
+        			myGameUI.clearCenterCardImg();
+        		}, 1, TimeUnit.SECONDS);
+            }
+
         }
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
@@ -176,18 +197,36 @@ class SlapOrPlace extends JFrame implements KeyListener
         	//check if its over
         	if(myPlayer.getGame().isRoundOver())
         	{
-        		previousPlayer();
-        		myPlayer.getGame().endRound(myPlayer);
-        		
-        		currentPlayerPlay = 1;
+        		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        		scheduler.schedule(() -> {
+        			previousPlayer();
+            		myPlayer.getGame().endRound(myPlayer);
+               		currentPlayerPlay = 1;
+        			myGameUI.clearCenterCardImg();
+        		}, 1, TimeUnit.SECONDS);
         	}
-        	if(currentPlayerPlay == 0 || c.isFaceCard())
+        	else if(currentPlayerPlay == 0 || c.isFaceCard())
         	{
 	        	nextPlayer();
 	        	currentPlayerPlay = c.mandatoryPlace();
         	}
         	
         }
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.schedule(() -> {
+	        myGameUI.updatePlayerCardCounts();
+
+			if(myPlayer.getPile().getSize() == 0)
+			{
+				activePlayersIdx.remove(playerIdx);
+			}
+			if(activePlayersIdx.size() == 0)
+			{
+				System.out.println("--------------GAME OVER------------------");
+			}
+		}, 1, TimeUnit.SECONDS);
+        
+        //after every click, update player card counts no matter what
     }
 
     @Override
@@ -200,12 +239,16 @@ class SlapOrPlace extends JFrame implements KeyListener
     
     private static void previousPlayer()
     {
-    	currentPlayerIdx = (currentPlayerIdx - 1 + activePlayers) % activePlayers;
+    	int i = activePlayersIdx.indexOf(currentPlayerIdx);
+    	i = (i - 1 + activePlayersIdx.size()) % activePlayersIdx.size();
+    	currentPlayerIdx = activePlayersIdx.get(i);
     }
     
     private static void nextPlayer()
     {
-    	currentPlayerIdx = (currentPlayerIdx + 1) % activePlayers;
+    	int i = activePlayersIdx.indexOf(currentPlayerIdx);
+    	i = (i + 1) % activePlayersIdx.size();
+    	currentPlayerIdx = activePlayersIdx.get(i);
     }
     
 }

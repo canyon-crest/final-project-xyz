@@ -161,8 +161,9 @@ class SlapOrPlace extends JFrame implements KeyListener
         	//check if its over
         	if(myPlayer.getGame().isRoundOver())
         	{
-        		myPlayer.getGame().endRound(myPlayer);
         		previousPlayer();
+        		myPlayer.getGame().endRound(myPlayer);
+        		
         		currentPlayerPlay = 1;
         	}
         	if(currentPlayerPlay == 0 || c.isFaceCard())

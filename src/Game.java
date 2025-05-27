@@ -109,8 +109,9 @@ public class Game{
 		
 	}
 	
-	public void endRound(Player winner)
+	public void endRound(Player playerAfterWinner)
 	{
+		Player winner = playerList.get((playerList.indexOf(playerAfterWinner) - 1 + playerList.size()) % playerList.size());
 		winner.addPile(centerPile);
 		winner.addPile(burnPile);
 	}

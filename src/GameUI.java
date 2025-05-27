@@ -17,9 +17,9 @@ public class GameUI extends JFrame {
     // For example, 2 human players and 2 bots.
     private int activePlayers;
 
-    public GameUI(Game g, String activePlayers) {
+    public GameUI(Game g, int activePlayers) {
     	this.g = g;
-    	this.activePlayers = Integer.parseInt(activePlayers);
+    	this.activePlayers = activePlayers;
         setTitle("Egyptian Hare - Game Screen");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);
@@ -118,6 +118,7 @@ public class GameUI extends JFrame {
 		URL imageURL = getClass().getResource(cardImageFileName);
     	ImageIcon icon = new ImageIcon(imageURL);
 		centerPile.setIcon(icon);
+		centerPile.setText("");
 		centerPile.setVisible(true);
     }
 }
@@ -146,16 +147,30 @@ class SlapOrPlace extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
         	//Slapping a card
-            myPlayer.slap();
-            System.out.println(myPlayer.getUsername() + " - slapped");
-            System.out.println(myPlayer.getPile().getSize() + " cards left");
+            boolean slapped = myPlayer.slap();
+            if(slapped)
+            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - slapped");
+            else
+            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - burned");
+            
+            if(slapped)
+            	currentPlayerPlay = 1;
+            else if(myPlayer.getPile().getSize() == 0)
+            {
+        		System.out.println("GAME OVER");
+        		return;
+    		}
         }
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
+        	if(c == null)
+    		{
+        		System.out.println("GAME OVER");
+        		return;
+    		}
         	myGameUI.changeCenterCardImg(c);
-        	System.out.println(myPlayer.getUsername() + " - placed a " + c.getCardFileName());
-        	System.out.println(myPlayer.getPile().getSize() + " cards left");
+        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
         	currentPlayerPlay--;
         	
         	//check if its over

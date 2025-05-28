@@ -99,8 +99,7 @@ public class MenuUI2 extends JFrame {
 
         setVisible(true);
     }
-
-    // Sample function that can access class-level components
+    //starts the game by intializing a Game object and opens gameUI
     private void startGame() {
         int playerCount = (int)(numPlayersCombo.getSelectedItem());
        

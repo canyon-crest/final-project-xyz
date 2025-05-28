@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.awt.event.*;
 import java.net.URL;
 import java.util.concurrent.*;
+import javax.swing.border.LineBorder;
 
 public class GameUI extends JFrame {
 
@@ -158,6 +159,11 @@ public class GameUI extends JFrame {
     		cardCountLabels[i].setText("" + g.getPlayerList().get(i).getPile().getSize());
     	}
     }
+    
+    public JPanel[] getPlayerPanels()
+    {
+    	return playerPanels;
+    }
 }
 
 class SlapOrPlace extends JFrame implements KeyListener
@@ -168,6 +174,9 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private static ArrayList<Integer> activePlayersIdx = new ArrayList<Integer>();
 	private static int currentPlayerPlay = 1;
 	private GameUI myGameUI;
+	private JPanel[] playerPanels;
+	private static LineBorder ACTIVE_BORDER = (LineBorder) BorderFactory.createLineBorder(Color.RED, 2);
+	private static LineBorder IDLE_BORDER = (LineBorder) BorderFactory.createLineBorder(Color.GRAY, 1);
 	
 	public SlapOrPlace(JPanel myPanel, Player myPlayer, int playerIdx, GameUI myGameUI)
 	{
@@ -175,6 +184,7 @@ class SlapOrPlace extends JFrame implements KeyListener
 		myPanel.setFocusable(true);
 		this.playerIdx = playerIdx;
 		this.myGameUI = myGameUI;
+		playerPanels = myGameUI.getPlayerPanels();
 		
 		activePlayersIdx.add(playerIdx);
 	}
@@ -247,6 +257,19 @@ class SlapOrPlace extends JFrame implements KeyListener
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.schedule(() -> {
 	        myGameUI.updatePlayerCardCounts();
+	        //remove panel border color from all player panels
+	        for (int i = 0; i< playerPanels.length; i++)
+	        {
+	        	if (i == currentPlayerIdx)
+	        	{
+	        		playerPanels[i].setBorder(ACTIVE_BORDER);
+	        	}
+	        	else
+	        	{
+	        		playerPanels[i].setBorder(IDLE_BORDER);
+	        	}
+	        }
+	        //set the current player's border to red
 		}, 1, TimeUnit.SECONDS);
         
     }

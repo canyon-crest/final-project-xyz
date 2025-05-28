@@ -95,9 +95,7 @@ public class MenuUI2 extends JFrame {
         add(playButtonPanel, BorderLayout.SOUTH);
      
         
-        
 
-        // Add Panels to Frame
 
         setVisible(true);
     }

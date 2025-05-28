@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 import java.net.URL;
+import java.util.concurrent.*;
 
 public class GameUI extends JFrame {
 
@@ -43,6 +44,7 @@ public class GameUI extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
         updateActivePlayers();
+        updatePlayerCardCounts();
 
         setVisible(true);
     }
@@ -69,11 +71,24 @@ public class GameUI extends JFrame {
         cardBackImages[index].setPreferredSize(new Dimension(80, 120));
         cardBackImages[index].setHorizontalAlignment(SwingConstants.CENTER);
         cardBackImages[index].setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(cardBackImages[index]);
+        String cardImageFileName = "cards/back1.GIF";
+		URL imageURL = getClass().getResource(cardImageFileName);
+    	ImageIcon icon = new ImageIcon(imageURL);
+    	cardBackImages[index].setIcon(icon);
+    	cardBackImages[index].setText("");
+    	cardBackImages[index].setVisible(true);
+		panel.add(cardBackImages[index]);
 
         // Placeholder for player icon (robot or person)
         playerIcons[index] = new JLabel("[Player Icon]");
         playerIcons[index].setAlignmentX(Component.CENTER_ALIGNMENT);
+        playerIcons[index].setPreferredSize(new Dimension(80, 80));
+        String playerIconFileName = "cards/playerIcon.png";
+		URL iconURL = getClass().getResource(playerIconFileName);
+    	ImageIcon playerIcon = new ImageIcon(iconURL);
+    	playerIcons[index].setIcon(playerIcon);
+    	playerIcons[index].setText("");
+    	playerIcons[index].setVisible(true);
         panel.add(playerIcons[index]);
 
         return panel;
@@ -104,7 +119,6 @@ public class GameUI extends JFrame {
         {
         	playerPanels[0].addKeyListener(new SlapOrPlace(playerPanels[0], playerList.get(i), i, this));
         }
-        SlapOrPlace.setActivePlayers(activePlayers);
     }
     
     
@@ -121,6 +135,19 @@ public class GameUI extends JFrame {
 		centerPile.setText("");
 		centerPile.setVisible(true);
     }
+    
+    public void clearCenterCardImg()
+    {
+    	centerPile.setVisible(false);
+    }
+    
+    public void updatePlayerCardCounts()
+    {
+    	for(int i = 0; i < activePlayers; i++)
+    	{
+    		cardCountLabels[i].setText("" + g.getPlayerList().get(i).getPile().getSize());
+    	}
+    }
 }
 
 class SlapOrPlace extends JFrame implements KeyListener
@@ -128,7 +155,7 @@ class SlapOrPlace extends JFrame implements KeyListener
 	private Player myPlayer;
 	private int playerIdx;
 	private static int currentPlayerIdx = 0;
-	private static int activePlayers;
+	private static ArrayList<Integer> activePlayersIdx = new ArrayList<Integer>();
 	private static int currentPlayerPlay = 1;
 	private GameUI myGameUI;
 	
@@ -138,6 +165,8 @@ class SlapOrPlace extends JFrame implements KeyListener
 		myPanel.setFocusable(true);
 		this.playerIdx = playerIdx;
 		this.myGameUI = myGameUI;
+		
+		activePlayersIdx.add(playerIdx);
 	}
 	
     @Override
@@ -147,65 +176,103 @@ class SlapOrPlace extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
         	//Slapping a card
-            boolean slapped = myPlayer.slap();
+            boolean slapped = myPlayer.slap(); //returns true for successful slap and false for burn
             if(slapped)
             	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - slapped");
             else
             	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - burned");
             
-            if(slapped)
-            	currentPlayerPlay = 1;
-            else if(myPlayer.getPile().getSize() == 0)
+            if(slapped) //if slap successful
             {
-        		System.out.println("GAME OVER");
-        		return;
-    		}
+            	//player associated with the slap key must place one card
+            	currentPlayerPlay = 1;
+            	currentPlayerIdx = playerIdx;
+            	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        		scheduler.schedule(() -> {
+        			myGameUI.clearCenterCardImg();
+        		}, 1, TimeUnit.SECONDS);
+            }
+            updateActivePlayers();
         }
         else if (e.getKeyCode() == myPlayer.getPKey().charAt(0) && currentPlayerIdx == playerIdx) {
           //Placing a card   
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
         	if(c == null)
     		{
-        		System.out.println("GAME OVER");
+        		//if a player is ever unable to place a card, they are out
+        		activePlayersIdx.remove(currentPlayerIdx);
+        		//next player must play the rest of the required cards for the eliminated player
+        		nextPlayer();
         		return;
     		}
         	myGameUI.changeCenterCardImg(c);
         	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
         	currentPlayerPlay--;
         	
-        	//check if its over
-        	if(myPlayer.getGame().isRoundOver())
-        	{
-        		previousPlayer();
-        		myPlayer.getGame().endRound(myPlayer);
-        		
-        		currentPlayerPlay = 1;
-        	}
-        	if(currentPlayerPlay == 0 || c.isFaceCard())
-        	{
-	        	nextPlayer();
-	        	currentPlayerPlay = c.mandatoryPlace();
-        	}
+        	//after one second to give people time to slap, check if the game is over. 
+        	//NOTE: if someone does slap during the 1 second, the pile will be empty and the round will not be over
+        		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        		scheduler.schedule(() -> {
+        			if(myPlayer.getGame().isRoundOver())
+                	{
+	        			previousPlayer(); //go to previous player
+	            		myPlayer.getGame().endRound(currentPlayerIdx); //winner was the previous active player who played face card
+	               		currentPlayerPlay = 1; //after center is cleared, winner must play 1 card
+	        			myGameUI.clearCenterCardImg(); //clear UI center
+	        			updateActivePlayers();
+                	}
+                	else if(currentPlayerPlay == 0 || c.isFaceCard()) //if round isn't over and cur player fulfills obligation/places face card
+                	{
+        	        	nextPlayer(); //go to next player
+        	        	currentPlayerPlay = c.mandatoryPlace(); //calculate the cards they need to place
+                	}
+        		}, 1, TimeUnit.SECONDS);
         	
         }
+        
+        //update card counts with a delay, giving time for slaps
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.schedule(() -> {
+	        myGameUI.updatePlayerCardCounts();
+		}, 1, TimeUnit.SECONDS);
+        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {}
     
-    public static void setActivePlayers(int activePlayersInput)
-    {
-    	activePlayers = activePlayersInput;
-    }
     
+    //move currentPlayerIdx to the previous active player
     private static void previousPlayer()
     {
-    	currentPlayerIdx = (currentPlayerIdx - 1 + activePlayers) % activePlayers;
+    	int i = activePlayersIdx.indexOf(currentPlayerIdx);
+    	i = (i - 1 + activePlayersIdx.size()) % activePlayersIdx.size();
+    	currentPlayerIdx = activePlayersIdx.get(i);
     }
     
+    //move currentPlayerIdx to the next active player
     private static void nextPlayer()
     {
-    	currentPlayerIdx = (currentPlayerIdx + 1) % activePlayers;
+    	int i = activePlayersIdx.indexOf(currentPlayerIdx);
+    	i = (i + 1) % activePlayersIdx.size();
+    	currentPlayerIdx = activePlayersIdx.get(i);
+    }
+    
+    
+    //update activePlayerIdx based on which players now have 0 cards
+    private void updateActivePlayers()
+    {
+    	ArrayList<Player> playerList = myPlayer.getGame().getPlayerList();
+    	for(int i = activePlayersIdx.size() - 1; i >= 0; i--)
+    	{
+    		if(playerList.get(activePlayersIdx.get(i)).getPile().getSize() == 0)//if player at active player idx position i has no cards
+    		{
+    			System.out.println(playerList.get(activePlayersIdx.get(i)).getUsername() + " has been eliminated.");
+    			activePlayersIdx.remove(i); //removes position i
+    			for(Integer j : activePlayersIdx) System.out.print(playerList.get(j).getUsername() + " ");
+    			System.out.println("remain.");
+    		}
+    	}
     }
     
 }

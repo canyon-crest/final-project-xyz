@@ -65,7 +65,7 @@ public class Game{
 	public boolean isRoundOver()
 	{
 		int cardsAfterFace = 0;
-		int cardsNeededAfterFace = 0;
+		int cardsNeededAfterFace = -1; //set to -1 so that cardsAfterFace != cardsNeededAfterFace by default. Would cause error if pile empty
 		for(int i = centerPile.getSize() - 1; i >= 0; i--)
 		{
 			if(!centerPile.get(i).isFaceCard())
@@ -109,11 +109,10 @@ public class Game{
 		
 	}
 	
-	public void endRound(Player playerAfterWinner)
+	public void endRound(int winnerIdx)
 	{
-		Player winner = playerList.get((playerList.indexOf(playerAfterWinner) - 1 + playerList.size()) % playerList.size());
-		winner.addPile(centerPile);
-		winner.addPile(burnPile);
+		Player winner = playerList.get(winnerIdx);
+		winner.takeCenterPile();
 	}
 	
 	

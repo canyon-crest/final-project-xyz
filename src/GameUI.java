@@ -311,6 +311,10 @@ class SlapOrPlace extends JFrame implements KeyListener
     			playerPanels[i].setVisible(false);
     		}
     	}
+    	if (activePlayersIdx.size() == 1)
+    	{
+    		WinnerUI i = new WinnerUI(myPlayer.getGame().getPlayerList().get(activePlayersIdx.get(0)).getUsername());
+    	}
     }
     
 }

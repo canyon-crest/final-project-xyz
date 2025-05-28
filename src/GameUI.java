@@ -308,6 +308,7 @@ class SlapOrPlace extends JFrame implements KeyListener
     			activePlayersIdx.remove(i); //removes position i
     			for(Integer j : activePlayersIdx) System.out.print(playerList.get(j).getUsername() + " ");
     			System.out.println("remain.");
+    			playerPanels[i].setVisible(false);
     		}
     	}
     }

@@ -163,14 +163,15 @@ class SlapOrPlace extends JFrame implements KeyListener
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
         	//Slapping a card
-            boolean slapped = myPlayer.slap();
+            boolean slapped = myPlayer.slap(); //returns true for successful slap and false for burn
             if(slapped)
             	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - slapped");
             else
             	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - burned");
             
-            if(slapped)
+            if(slapped) //if slap successful
             {
+            	//player associated with the slap key must place one card
             	currentPlayerPlay = 1;
             	currentPlayerIdx = playerIdx;
             	ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -201,16 +202,16 @@ class SlapOrPlace extends JFrame implements KeyListener
         		scheduler.schedule(() -> {
         			if(myPlayer.getGame().isRoundOver())
                 	{
-	        			previousPlayer();
+	        			previousPlayer(); //go to previous player
 	            		myPlayer.getGame().endRound(currentPlayerIdx); //winner was the previous active player who played face card
-	               		currentPlayerPlay = 1;
-	        			myGameUI.clearCenterCardImg();
+	               		currentPlayerPlay = 1; //after center is cleared, winner must play 1 card
+	        			myGameUI.clearCenterCardImg(); //clear UI center
 	        			updateActivePlayers();
                 	}
-                	else if(currentPlayerPlay == 0 || c.isFaceCard())
+                	else if(currentPlayerPlay == 0 || c.isFaceCard()) //if round isn't over and cur player fulfills obligation/places face card
                 	{
-        	        	nextPlayer();
-        	        	currentPlayerPlay = c.mandatoryPlace();
+        	        	nextPlayer(); //go to next player
+        	        	currentPlayerPlay = c.mandatoryPlace(); //calculate the cards they need to place
                 	}
         		}, 1, TimeUnit.SECONDS);
         	

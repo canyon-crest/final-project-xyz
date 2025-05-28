@@ -185,6 +185,7 @@ class SlapOrPlace extends JFrame implements KeyListener
 		this.playerIdx = playerIdx;
 		this.myGameUI = myGameUI;
 		playerPanels = myGameUI.getPlayerPanels();
+		playerPanels[0].setBorder(ACTIVE_BORDER);
 		
 		activePlayersIdx.add(playerIdx);
 	}

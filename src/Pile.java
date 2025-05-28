@@ -48,12 +48,15 @@ public class Pile
 	}
 	
 	//Get the arrayList
-	//@return
+	//@return the arrayList holding all the a cards
 	public ArrayList<Card> getCardList()
 	{
 		return cardList;
 	}
 	
+	//Get the card at index i
+	//@param integer index i
+	//@return the card at the position index i
 	public Card get(int i)
 	{
 		if(i >= 0 && i < getSize())

@@ -27,15 +27,18 @@ public class Game{
 	}
 	
 	//Returns whether a slap is valid or not
+	//@return true if slap is valid and false otherwise
 	public boolean isASlap() {
 		ArrayList<Card> cardList = centerPile.getCardList();
 		
+		//no slaps when pile size less than two.
 		if(cardList.size() < 2) 
 			return false;
 		
 		int c1 = cardList.get(cardList.size() - 1).getPointValue();
 		int c2 = cardList.get(cardList.size() - 2).getPointValue();
 
+		//if there are at least two cards, check for two card slap combos
 		if(cardList.size() >= 2)
 		{
 			if(doubles && c1 == c2)
@@ -46,6 +49,7 @@ public class Game{
 				return true;
 		}
 			
+		//if there are at least 3 cards, check for 3 card slap combos
 		if(cardList.size() >= 3)
 		{
 			int c3 = cardList.get(cardList.size() - 3).getPointValue();
@@ -62,6 +66,9 @@ public class Game{
 		return false;
 	}
 	
+	
+	//Checks if the round is over. 
+	//@return true if round is over and false otherwise
 	public boolean isRoundOver()
 	{
 		int cardsAfterFace = 0;
@@ -79,6 +86,7 @@ public class Game{
 		return cardsAfterFace == cardsNeededAfterFace;
 	}
 	
+	//Deals cards evenly to all characters 
 	public void dealCards()
 	{
 		String[] RANKS = {"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"};
@@ -95,6 +103,8 @@ public class Game{
 			
 	}
 	
+	//Initialize the rules based on the inputs from the UI
+	//@param array of booleans containing the selections from the rules checkboxes
 	public void initializeRules(boolean[] rules)
 	{
 		doubles = rules[0];
@@ -104,11 +114,9 @@ public class Game{
 		gayMarriages = rules[4];
 		sequences = rules[5];
 	}
-	//Starts the game
-	public void startGame() {
-		
-	}
-	
+
+	//ends the round by giving the winning player the entire center pile
+	//@param winning player's index in playerList
 	public void endRound(int winnerIdx)
 	{
 		Player winner = playerList.get(winnerIdx);
@@ -117,21 +125,27 @@ public class Game{
 	
 	
 	
-	
+	//Add player to playerList
+	//@param the player to be added
 	public void addPlayer(Player p)
 	{
 		playerList.add(p);
 	}
 	
+	//Get the center pile
+	//@return center pile
 	public Pile getCenterPile()
 	{
 		return centerPile;
 	}
 	
+	//@return the burn pile
 	public Pile getBurnPile()
 	{
 		return burnPile;
 	}
+	
+	//@return the player List
 	public ArrayList<Player> getPlayerList()
 	{
 		return playerList;

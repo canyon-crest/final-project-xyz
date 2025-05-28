@@ -71,11 +71,23 @@ public class GameUI extends JFrame {
         cardBackImages[index].setPreferredSize(new Dimension(80, 120));
         cardBackImages[index].setHorizontalAlignment(SwingConstants.CENTER);
         cardBackImages[index].setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(cardBackImages[index]);
+        String cardImageFileName = "cards/back1.GIF";
+		URL imageURL = getClass().getResource(cardImageFileName);
+    	ImageIcon icon = new ImageIcon(imageURL);
+    	cardBackImages[index].setIcon(icon);
+    	cardBackImages[index].setText("");
+    	cardBackImages[index].setVisible(true);
+		panel.add(cardBackImages[index]);
 
         // Placeholder for player icon (robot or person)
         playerIcons[index] = new JLabel("[Player Icon]");
         playerIcons[index].setAlignmentX(Component.CENTER_ALIGNMENT);
+        String playerIconFileName = "cards/playerIcon.png";
+		URL iconURL = getClass().getResource(playerIconFileName);
+    	ImageIcon playerIcon = new ImageIcon(iconURL);
+    	playerIcons[index].setIcon(playerIcon);
+    	playerIcons[index].setText("");
+    	playerIcons[index].setVisible(true);
         panel.add(playerIcons[index]);
 
         return panel;

@@ -82,6 +82,7 @@ public class GameUI extends JFrame {
         // Placeholder for player icon (robot or person)
         playerIcons[index] = new JLabel("[Player Icon]");
         playerIcons[index].setAlignmentX(Component.CENTER_ALIGNMENT);
+        playerIcons[index].setPreferredSize(new Dimension(80, 80));
         String playerIconFileName = "cards/playerIcon.png";
 		URL iconURL = getClass().getResource(playerIconFileName);
     	ImageIcon playerIcon = new ImageIcon(iconURL);

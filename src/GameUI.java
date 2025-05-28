@@ -18,6 +18,7 @@ public class GameUI extends JFrame {
     // For example, 2 human players and 2 bots.
     private int activePlayers;
 
+    
     public GameUI(Game g, int activePlayers) {
     	this.g = g;
     	this.activePlayers = activePlayers;
@@ -49,6 +50,9 @@ public class GameUI extends JFrame {
         setVisible(true);
     }
 
+    //Create a new player slot and panel
+    //@param player Index
+    //@return JPanel of the player
     private JPanel createPlayerSlot(int index) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -94,6 +98,7 @@ public class GameUI extends JFrame {
         return panel;
     }
 
+    //update the information for each player slot
     private void updateActivePlayers() {
         // Show only active player slots, hide others
     	
@@ -126,6 +131,8 @@ public class GameUI extends JFrame {
         //SwingUtilities.invokeLater(GameUI::new);
     }
     
+    //Change the card image to whatever is inputted
+    //@param the card to change to
     public void changeCenterCardImg(Card c)
     {
     	String cardImageFileName = c.getCardFileName();
@@ -136,11 +143,14 @@ public class GameUI extends JFrame {
 		centerPile.setVisible(true);
     }
     
+    
+    //Clears the center card image
     public void clearCenterCardImg()
     {
     	centerPile.setVisible(false);
     }
     
+    //Updates the card counts of all players. 
     public void updatePlayerCardCounts()
     {
     	for(int i = 0; i < activePlayers; i++)
@@ -173,6 +183,9 @@ class SlapOrPlace extends JFrame implements KeyListener
     public void keyTyped(KeyEvent e) {}
 
     @Override
+    //Process slaps and card placements based on key presses. 
+    //@param key pressed by player
+    //@return none
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == myPlayer.getSKey().charAt(0)) {
         	//Slapping a card
@@ -199,10 +212,10 @@ class SlapOrPlace extends JFrame implements KeyListener
         	Card c = myPlayer.placeCard(myPlayer.getGame().getCenterPile());
         	if(c == null)
     		{
-        		//if a player is ever unable to place a card, they are out
-        		activePlayersIdx.remove(currentPlayerIdx);
         		//next player must play the rest of the required cards for the eliminated player
         		nextPlayer();
+        		//if a player is ever unable to place a card, they are out
+        		updateActivePlayers();
         		return;
     		}
         	myGameUI.changeCenterCardImg(c);

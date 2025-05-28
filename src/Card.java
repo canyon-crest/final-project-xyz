@@ -42,18 +42,23 @@ public class Card{
 		return suit;
 	}
 
+	//@return this card's rank
 	public String getRank() {
 		return rank;
 	}
 
+	//@return this card's pointValue
 	public int getPointValue() {
 		return pointValue;
 	}
 
+	//@return true if the card is a face card and false otherwise
 	public boolean isFaceCard() {
 		return (pointValue > 10 || pointValue == 1);
 	}
 	
+	//Give the number of cards the next player should place if the previous player plays this
+	//@return int representing number of cards
 	public int mandatoryPlace()
 	{
 		if(pointValue == 1) return 4;

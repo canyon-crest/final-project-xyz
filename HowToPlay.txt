@@ -1,0 +1,4 @@
+This game is Egyptian War, with 2-4 people able to play at the same time. 
+  
+
+When running the program, you will be shown a screen. On that screen, there are 6 rules on the left, which you can choose to play with

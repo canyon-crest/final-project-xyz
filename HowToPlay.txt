@@ -1,4 +1,32 @@
-This game is Egyptian War, with 2-4 people able to play at the same time. 
-  
+This game is Egyptian War, with 2-4 people able to play at the same time.
+At the start of the game, each person is dealt a card one by one until all of the cards are passed out, resulting in each player having a roughly equal amount of cards. The players are not allowed to see their cards.
 
-When running the program, you will be shown a screen. On that screen, there are 6 rules on the left, which you can choose to play with
+Players then take turns placing cards with the following rules:
+-If a Jack is placed, the next player has to place down 1 card, if that is a face card, then the next player goes, and if it is not a face card, then the player who played the Jack wins the pile
+-If a Queen is placed, the next player has to place down 2 cards, if one is a face card, then the next player goes, and if it is not a face card, then the player who played the Queen wins the pile
+-If a King is placed, the next player has to place down 3 cards, if one is a face card, then the next player goes, and if it is not a face card, then the player who played the King wins the pile
+-If an Ace is placed, the next player has to place down 4 cards, if one is a face card, then the next player goes, and if it is not a face card, then the player who played the Ace wins the pile
+-The game ends when only one player has cards left. Players lose when they run out of cards
+
+Additionally, there are slaps. If a player slaps and is correct, then they win the pile. Otherwise, they have to burn a card, which is adding a card to the bottom of the pile (this card is not in play, and goes to the winner of the pile when won)
+
+Valid slaps are defined before the game starts, and are listed below:
+-Doubles: if two cards placed in a row are the same rank
+  -Example: a 9 is placed, and then another 9 is placed (or in other words: 9 9)
+-Sandwiches: if the first and third of the three top-most cards placed are the same rank
+  -Example: 9 4 9
+-Marriages: if the two top-most cards are a Q and K or a K and Q
+  -Example: K Q
+-Divorces: if the first and third of the three top-most cards placed are a Q and K or a K and Q
+  -Example: Q 9 K
+-Divorces: if the first and third of the three top-most cards placed are a J and K or a K and J
+  -Example: K A J
+-Sequences: If the three top-most cards placed are consecutive and in increasing or decreasing order
+  -Examples: 4 5 6 or 9 8 7
+  -Incorrect: 9 7 8 or 5 4 6
+
+When running the program, you will be shown a screen. On that screen, the slapping rules defined above will be on the left side of the screen, and you can choose which to play with
+You will also be able to select the number of players (make sure to select the right amount)
+When everything necessary has been selected, press the "Start Game" button. You will be shown a new screen with the center pile and players, with the red outline indicating which player plays first. The keys for slapping and placing will be indicated in each player's box
+YOU MUST PLAY THE CARDS SLOWLY, OTHERWISE THE GAME MAY BREAK
+When one of the players wins, a new window will pop up, congradulating the winner.

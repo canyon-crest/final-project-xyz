@@ -227,36 +227,32 @@ class SlapOrPlace extends JFrame implements KeyListener
         		nextPlayer();
         		//if a player is ever unable to place a card, they are out
         		updateActivePlayers();
+        		System.out.println("got here");
         		return;
     		}
-        	else
-        	{
-        		myGameUI.changeCenterCardImg(c);
-            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
-            	currentPlayerPlay--;
-        	}
-//        	myGameUI.changeCenterCardImg(c);
-//        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
-//        	currentPlayerPlay--;
+        	System.out.println("got here");
+        	myGameUI.changeCenterCardImg(c);
+        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
+        	currentPlayerPlay--;
         	
         	//after one second to give people time to slap, check if the game is over. 
         	//NOTE: if someone does slap during the 1 second, the pile will be empty and the round will not be over
-        		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        		scheduler.schedule(() -> {
-        			if(myPlayer.getGame().isRoundOver())
-                	{
-	        			previousPlayer(); //go to previous player
-	            		myPlayer.getGame().endRound(currentPlayerIdx); //winner was the previous active player who played face card
-	               		currentPlayerPlay = 1; //after center is cleared, winner must play 1 card
-	        			myGameUI.clearCenterCardImg(); //clear UI center
-	        			updateActivePlayers();
-                	}
-                	else if(currentPlayerPlay == 0 || c.isFaceCard()) //if round isn't over and cur player fulfills obligation/places face card
-                	{
-        	        	nextPlayer(); //go to next player
-        	        	currentPlayerPlay = c.mandatoryPlace(); //calculate the cards they need to place
-                	}
-        		}, 1, TimeUnit.SECONDS);
+    		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    		scheduler.schedule(() -> {
+    			if(myPlayer.getGame().isRoundOver())
+            	{
+        			previousPlayer(); //go to previous player
+            		myPlayer.getGame().endRound(currentPlayerIdx); //winner was the previous active player who played face card
+               		currentPlayerPlay = 1; //after center is cleared, winner must play 1 card
+        			myGameUI.clearCenterCardImg(); //clear UI center
+        			updateActivePlayers();
+            	}
+            	else if(currentPlayerPlay == 0 || c.isFaceCard()) //if round isn't over and cur player fulfills obligation/places face card
+            	{
+    	        	nextPlayer(); //go to next player
+    	        	currentPlayerPlay = c.mandatoryPlace(); //calculate the cards they need to place
+            	}
+    		}, 1, TimeUnit.SECONDS);
         	
         }
         

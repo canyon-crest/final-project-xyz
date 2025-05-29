@@ -229,9 +229,15 @@ class SlapOrPlace extends JFrame implements KeyListener
         		updateActivePlayers();
         		return;
     		}
-        	myGameUI.changeCenterCardImg(c);
-        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
-        	currentPlayerPlay--;
+        	else
+        	{
+        		myGameUI.changeCenterCardImg(c);
+            	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
+            	currentPlayerPlay--;
+        	}
+//        	myGameUI.changeCenterCardImg(c);
+//        	System.out.println("(" + myPlayer.getPile().getSize() + ")" + myPlayer.getUsername() + " - placed a " + c.getCardFileName());
+//        	currentPlayerPlay--;
         	
         	//after one second to give people time to slap, check if the game is over. 
         	//NOTE: if someone does slap during the 1 second, the pile will be empty and the round will not be over

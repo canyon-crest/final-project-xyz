@@ -12,6 +12,7 @@ public class Game{
 	private boolean sequences;
 	
 	private int numPlayers;
+	private int numBots;
 	
 	private Pile centerPile;
 	private Pile burnPile;
